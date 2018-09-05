@@ -35,7 +35,7 @@
   "short_name": "CyberChef",
   "orientation": "portrait",
   "display": "standalone",
-  "start_url": ".",
+  "start_url": "/CyberChef/",
   "description": "The Cyber Swiss Army Knife - a web app for encryption, encoding, compression and data analysis",
   "background_color": "#ffffff"
 }

@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "Shellcode.js"
   },
   {
-    "revision": "9cd8d84cc21b272a06cf",
+    "revision": "fe927f3fa54a5d1c39db",
     "url": "main.js"
   },
   {
@@ -12,7 +12,7 @@ self.__precacheManifest = [
     "url": "sitemap.js"
   },
   {
-    "revision": "9cd8d84cc21b272a06cf",
+    "revision": "fe927f3fa54a5d1c39db",
     "url": "styles.css"
   },
   {
@@ -23,7 +23,7 @@ self.__precacheManifest = [
     "url": "icon_96x96.124338b7f41589eb7c704488ee10c220.png"
   },
   {
-    "revision": "daaca63ee72eebf021faa168077a122f",
+    "revision": "17196f6cb752bd79816cf1c14afbb401",
     "url": "index.html"
   },
   {

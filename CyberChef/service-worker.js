@@ -15,7 +15,7 @@ importScripts("dist/workbox-v3.4.1/workbox-sw.js");
 workbox.setConfig({modulePathPrefix: "dist/workbox-v3.4.1"});
 
 importScripts(
-  "dist/precache-manifest.34eb1af0fee621a8918874d471fd79bf.js"
+  "dist/precache-manifest.59734c601941337657934488a18b00f1.js"
 );
 
 /**
@@ -27,4 +27,4 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerRoute(/\//, workbox.strategies.networkFirst({ networkTimeoutSeconds: 10, plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]})] }), 'GET');
+workbox.routing.registerRoute(/\/CyberChef\//, workbox.strategies.networkFirst({ networkTimeoutSeconds: 10, plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]})] }), 'GET');
