@@ -14,7 +14,7 @@
 importScripts("workbox.js");
 
 importScripts(
-  "precache-manifest.962d3c520068477136397a41af3e8d73.js"
+  "precache-manifest.55b3c765b5c0840d84e8856ad9cec51e.js"
 );
 
 /**
