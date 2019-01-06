@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>yeet</title>
+    <script src="libyara-wasm.js"></script>
+    <script>
+        Module.onRuntimeInitialized = _ => {
+            document.forms["yara"].style.display = "block";
+        }
+        function testRules () {
+            const rules = document.forms["yara"]["rules"].value;
+            const data = document.forms["yara"]["data"].value;
+            const testResults = Module.run(data, rules);
+            let mapKeys = testResults.keys();
+            for (let i = 0; i < mapKeys.size(); i++) {
+                let vect = testResults.get(mapKeys.get(i));
+                let matchString = `Rule "${mapKeys.get(i)}" matches:`;
+                for (let j = 0; j < vect.size(); j++) {
+                    matchString += ` ${vect.get(i)}`;
+                }
+                const para = document.createElement("p");
+                para.append(document.createTextNode(matchString));
+                document.body.appendChild(para);
+            }
+        }
+    </script>
+</head>
+<body>
+<form name="yara" style="display: none">
+    Rules:<br>
+    <textarea cols="40" rows="5" name="rules">
+rule foo {
+    strings:
+        $re1 = /foo/
+    condition:
+        $re1
+}
+rule bar {
+    strings:
+        $re1 = /bar/
+    condition:
+        $re1
+}
+    </textarea>
+    <br>Data:<br>
+    <textarea cols="40" rows="5" name="data">foobar foobar bar foo foobar</textarea>
+    <br>
+    <input type="button" value="Submit" onclick="testRules()">
+</form>
+</body>
+</html>
