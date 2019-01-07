@@ -3,33 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>Yara WASM Test</title>
-    <script src="libyara-wasm.js"></script>
+    <link rel="stylesheet" href="spectre.min.css">
+    <link rel="stylesheet" href="spectre-exp.min.css">
+    <link rel="stylesheet" href="spectre-icons.min.css">
+    <script src="build/libyara-wasm.js"></script>
     <script>
         Module.onRuntimeInitialized = _ => {
-            document.forms["yara"].style.display = "block";
-        }
-        function testRules () {
+            document.getElementById("submit").classList.remove("loading");
+        };
+        function runYara () {
+            let cNode = document.getElementById("results").cloneNode(false);
+            document.getElementById("results").parentNode.replaceChild(cNode, document.getElementById("results"));
             const rules = document.forms["yara"]["rules"].value;
             const data = document.forms["yara"]["data"].value;
-            const testResults = Module.run(data, rules);
-            let mapKeys = testResults.keys();
-            for (let i = 0; i < mapKeys.size(); i++) {
-                let vect = testResults.get(mapKeys.get(i));
-                let matchString = `Rule "${mapKeys.get(i)}" matches:`;
-                for (let j = 0; j < vect.size(); j++) {
-                    matchString += ` ${vect.get(i)}`;
+            const resp = Module.run(data, rules);
+            if (resp.compileErrors.size() > 0) {
+                //console.log("Issues!");
+                for (let i = 0; i < resp.compileErrors.size(); i++) {
+                    const compileError = resp.compileErrors.get(i);
+                    print(`Error on line ${compileError.lineNumber}: ${compileError.message}`);
                 }
-                const para = document.createElement("p");
-                para.append(document.createTextNode(matchString));
-                document.body.appendChild(para);
+                return;
             }
+            const matchedRules = resp.matchedRules;
+            for (let i = 0; i < matchedRules.keys().size(); i++) {
+                const rule_matches = matchedRules.get(matchedRules.keys().get(i));
+                print(`Rule "${matchedRules.keys().get(i)}" matches:`);
+                let matchString = "";
+                for (let j = 0; j < rule_matches.size(); j++) {
+                    const match = rule_matches.get(j);
+                    matchString += `Position ${match.location}, length ${match.matchLength}, data: ${match.data}<br>\n`;
+                }
+                print(matchString);
+            }
+        }
+        function print (string) {
+            const para = document.createElement("p");
+            para.innerHTML = string;
+            document.getElementById("results").appendChild(para);
         }
     </script>
 </head>
 <body>
-<form name="yara" style="display: none">
-    Rules:<br>
-    <textarea cols="40" rows="5" name="rules">
+<div class="container" style="max-width: 50%">
+<form name="yara" class="form-horizontal">
+    <div class="form-group columns">
+        <label class="form-label column col-6 col-sm-12" for="rules">Rules
+            <textarea class="form-input" cols="40" rows="5" id="rules" name="rules">
 rule foo {
     strings:
         $re1 = /foo/
@@ -42,11 +62,17 @@ rule bar {
     condition:
         $re1
 }
-    </textarea>
-    <br>Data:<br>
-    <textarea cols="40" rows="5" name="data">foobar foobar bar foo foobar</textarea>
-    <br>
-    <input type="button" value="Submit" onclick="testRules()">
+        </textarea></label>
+
+        <label class="form-label column col-6 col-sm-12" for="data">Data
+            <textarea class="form-input" cols="40" rows="5" name="data" id="data">foobar foobar bar foo foobar</textarea><br>
+        </label>
+    </div>
+    <div class="columns">
+        <button class="btn loading column col-ml-auto col-2" type="button" onclick="runYara()" id="submit">Submit</button>
+    </div>
 </form>
+<code id="results"></code>
+</div>
 </body>
 </html>
